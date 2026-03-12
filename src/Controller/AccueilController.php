@@ -14,15 +14,15 @@ final class AccueilController extends AbstractController
         return $this->render('accueil/index.html.twig');
     }
 
-    #[Route('/liste-de-cours', name: 'app_liste_cours')]
+    #[Route('/liste-des-cours', name: 'app_liste_cours')]
     public function listeCours(): Response
     {
-        return $this->render('liste-de-cours/index.html.twig');
+        return $this->render('accueil/listeCours.html.twig');
     }
 
     #[Route('/a-propos', name: 'app_a_propos')]
     public function aPropos(): Response
     {
-        return $this->render('a-propos/index.html.twig');
+        return $this->render('accueil/aPropos.html.twig');
     }
 }
