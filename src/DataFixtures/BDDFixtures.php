@@ -29,11 +29,17 @@ class BDDFixtures extends Fixture
         $seanceRepo = $manager->getRepository(Seance::class);
 
         //Tableau de données pour les Types
-        $typeData = ["individuels", "collectifs"];
+        $typeData = [
+            ["individuels", "1"],
+            ["collectifs", "15"]
+        ];
 
         foreach ($typeData as $data) {
+            [$libelle, $nb] = $data;
+
             $type= new Type();
-            $type->setLibelleType($data);
+            $type->setLibelleType($libelle)
+                ->setNbPlaces($nb);
             $manager->persist($type);
         }
 
