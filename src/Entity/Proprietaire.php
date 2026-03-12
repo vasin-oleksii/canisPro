@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProprietaireRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProprietaireRepository::class)]
@@ -31,6 +33,17 @@ class Proprietaire
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
+
+    /**
+     * @var Collection<int, Chien>
+     */
+    #[ORM\OneToMany(targetEntity: Chien::class, mappedBy: 'proprietaire')]
+    private Collection $chiens;
+
+    public function __construct()
+    {
+        $this->chiens = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,6 +118,36 @@ class Proprietaire
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Chien>
+     */
+    public function getChiens(): Collection
+    {
+        return $this->chiens;
+    }
+
+    public function addChien(Chien $chien): static
+    {
+        if (!$this->chiens->contains($chien)) {
+            $this->chiens->add($chien);
+            $chien->setProprietaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChien(Chien $chien): static
+    {
+        if ($this->chiens->removeElement($chien)) {
+            // set the owning side to null (unless already changed)
+            if ($chien->getProprietaire() === $this) {
+                $chien->setProprietaire(null);
+            }
+        }
 
         return $this;
     }

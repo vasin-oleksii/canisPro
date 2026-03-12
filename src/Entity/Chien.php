@@ -34,6 +34,10 @@ class Chien
     #[ORM\OneToMany(targetEntity: Inscription::class, mappedBy: 'chien')]
     private Collection $inscriptions;
 
+    #[ORM\ManyToOne(inversedBy: 'chiens')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Proprietaire $proprietaire = null;
+
     public function __construct()
     {
         $this->inscriptions = new ArrayCollection();
@@ -118,6 +122,18 @@ class Chien
                 $inscription->setChien(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProprietaire(): ?Proprietaire
+    {
+        return $this->proprietaire;
+    }
+
+    public function setProprietaire(?Proprietaire $proprietaire): static
+    {
+        $this->proprietaire = $proprietaire;
 
         return $this;
     }

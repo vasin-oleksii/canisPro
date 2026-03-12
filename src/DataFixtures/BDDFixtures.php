@@ -8,6 +8,8 @@ use App\Entity\Cour;
 use App\Entity\Seance;
 use App\Entity\User;
 use App\Entity\Proprietaire;
+use App\Entity\Chien;
+use App\Entity\Inscription;
 use \DateTime;
 use \DateInterval;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -22,6 +24,9 @@ class BDDFixtures extends Fixture
         $niveauRepo = $manager->getRepository(Niveau::class);
         $courRepo = $manager->getRepository(Cour::class);
         $userRepo = $manager->getRepository(User::class);
+        $proprietaireRepo = $manager->getRepository(Proprietaire::class);
+        $chienRepo = $manager->getRepository(Chien::class);
+        $seanceRepo = $manager->getRepository(Seance::class);
 
         //Tableau de données pour les Types
         $typeData = ["individuels", "collectifs"];
@@ -136,6 +141,54 @@ class BDDFixtures extends Fixture
                  ->setAdresse($adresse)
                  ->setUser($user);
             $manager->persist($proprio);
+        }
+
+        $manager->flush();
+
+        //Tableau de données pour les Proprios
+        $chiensData = [
+            ["Golden retriever", 'Tony', 7, "male", "Test"],
+            ["Beagle", 'Beag', 6, "male", "Test"],
+            ["Husky", 'Taia', 5, "femelle", "User"],
+            ["Bulldog", 'Bully', 8, "femelle", "User"],
+        ];
+
+        foreach ($chiensData as $data) {
+            [$race, $nom, $age, $sexe, $pro] = $data;
+
+            //Verification de présence dans BDD
+            $proprio = $proprietaireRepo->findOneBy(['nom' => $pro]);
+
+            $chien = new Chien();
+            $chien->setRace($race)
+                 ->setNomChien($nom)
+                 ->setAge($age)
+                 ->setSexe($sexe)
+                 ->setProprietaire($proprio);
+            $manager->persist($chien);
+        }
+
+        $manager->flush();
+
+        //Tableau de données pour les Proprios
+        $inscriptionsData = [
+            [new \DateTime('2008-08-08'), new \DateTime('2008-09-08'), 'Tony'],
+            [new \DateTime('2008-08-08'), new \DateTime('2008-09-12'), 'Taia'],
+            [new \DateTime('2008-08-08'), new \DateTime('2008-09-12'), 'Bully'],
+        ];
+
+        foreach ($inscriptionsData as $data) {
+            [$date, $laSeance, $leChien] = $data;
+
+            //Verification de présence dans BDD
+            $chien = $chienRepo->findOneBy(['nomChien' => $leChien]);
+            $seance = $seanceRepo->findOneBy(['date' => $laSeance]);
+
+            $inscription = new Inscription();
+            $inscription->setDateInscription($date)
+                 ->setSeance($seance)
+                 ->setChien($chien);
+            $manager->persist($inscription);
         }
 
         $manager->flush();
