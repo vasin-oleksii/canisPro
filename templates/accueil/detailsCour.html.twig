@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail du cours{% endblock %}
+
+{% block body %}
+
+<div class="container mt-5">
+
+    <div class="text-center mb-5">
+        <h1 class="display-4">En savoir plus sur le {{cour.nomCour}}</h1>
+        <p class="lead">Découvrez les cours proposés par CanisPro Education</p>
+    </div>
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-dark text-white">
+                    <h2 class="mb-0">{{ cour.nomCour }}</h2>
+                </div>
+
+                <div class="card-body">
+
+                    <h5 class="text-secondary mb-3">Description</h5>
+
+                    <p class="mb-4">
+                        {{ cour.description }}
+                    </p>
+
+                    <hr>
+
+                    <h5 class="text-secondary mb-3">Informations du cours</h5>
+
+                    <div class="row text-center mb-4">
+                    <div class="card-body">
+
+                        <table class="table">
+
+                            <tr>
+                                <th>Type</th>
+                                <td>{{ cour.type.libelleType }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Niveau</th>
+                                <td>{{ cour.niveau.libelleNiveau }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Prix</th>
+                                <td>{{ cour.prix }} €</td>
+                            </tr>
+
+                        </table>
+
+                        <br>
+
+                        <div class="d-flex justify-content-between">
+
+                            <a href="{{ path('app_liste_cours') }}" class="btn btn-outline-secondary">
+                                Retour aux cours
+                            </a>
+
+                            <a href="#" class="btn btn-secondary">
+                                Voir les Séances
+                            </a>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
