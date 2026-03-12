@@ -7,6 +7,7 @@ use App\Entity\Niveau;
 use App\Entity\Cour;
 use App\Entity\Seance;
 use App\Entity\User;
+use App\Entity\Proprietaire;
 use \DateTime;
 use \DateInterval;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -20,6 +21,7 @@ class BDDFixtures extends Fixture
         $typeRepo = $manager->getRepository(Type::class);
         $niveauRepo = $manager->getRepository(Niveau::class);
         $courRepo = $manager->getRepository(Cour::class);
+        $userRepo = $manager->getRepository(User::class);
 
         //Tableau de données pour les Types
         $typeData = ["individuels", "collectifs"];
@@ -110,6 +112,30 @@ class BDDFixtures extends Fixture
                  ->setPassword($pass)
                  ->setRoles($role);
             $manager->persist($user);
+        }
+
+        $manager->flush();
+
+        //Tableau de données pour les Proprios
+        $proprietairesData = [
+            ["Test", 'Test', "test@gmail.com", "0000000000", "15 rue du test", "test@gmail.com"],
+            ["User", 'User', "admin@gmail.com", "0000000000", "15 rue du user", "user@gmail.com"],
+        ];
+
+        foreach ($proprietairesData as $data) {
+            [$nom, $prenom, $mail, $tel, $adresse, $login] = $data;
+
+            //Verification de présence dans BDD
+            $user = $userRepo->findOneBy(['email' => $login]);
+
+            $proprio = new Proprietaire();
+            $proprio->setNom($nom)
+                 ->setPrenom($prenom)
+                 ->setMail($mail)
+                 ->setTel($tel)
+                 ->setAdresse($adresse)
+                 ->setUser($user);
+            $manager->persist($proprio);
         }
 
         $manager->flush();
