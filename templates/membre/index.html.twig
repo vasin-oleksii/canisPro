@@ -1,20 +1,155 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello MembreController!{% endblock %}
+{% block title %}Espace Membre{% endblock %}
 
 {% block body %}
+
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .member-hero {
+        background: linear-gradient(135deg, #0d6efd 0%, #5a9bff 100%);
+        color: #fff;
+        border-radius: 1rem;
+    }
+
+    .card-soft {
+        border: 0;
+        border-radius: 1rem;
+        box-shadow: 0 0.5rem 1.25rem rgba(13, 110, 253, 0.08);
+    }
+
+    .dog-card {
+        border: 1px solid #e9ecef;
+        border-radius: 0.9rem;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .dog-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+    }
+
+    .info-label {
+        color: #6c757d;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .info-value {
+        font-weight: 600;
+        color: #212529;
+    }
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div class="container py-3">
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>D:/Env_symfony_Angular_portable/Env_symfony_Angular_portable/projets/canisPro/src/Controller/MembreController.php</code></li>
-        <li>Your template at <code>D:/Env_symfony_Angular_portable/Env_symfony_Angular_portable/projets/canisPro/templates/membre/index.html.twig</code></li>
-    </ul>
+    <div class="member-hero p-4 p-md-5 mb-4">
+        <h2 class="mb-2">Bienvenue {{ membre.prenom }} {{ membre.nom }} 👋</h2>
+        <p class="mb-0 opacity-75">Retrouvez ici vos informations personnelles et la fiche de vos compagnons.</p>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Informations membre -->
+        <div class="col-md-5">
+            <div class="card card-soft h-90">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Vos informations</h4>
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item py-3">
+                            <div class="info-label">Nom</div>
+                            <div class="info-value">{{ membre.nom }}</div>
+                        </li>
+                        <li class="list-group-item py-3">
+                            <div class="info-label">Prénom</div>
+                            <div class="info-value">{{ membre.prenom }}</div>
+                        </li>
+                        <li class="list-group-item py-3">
+                            <div class="info-label">Email</div>
+                            <div class="info-value">{{ membre.mail }}</div>
+                        </li>
+                        <li class="list-group-item py-3">
+                            <div class="info-label">Téléphone</div>
+                            <div class="info-value">{{ membre.tel }}</div>
+                        </li>
+                        <li class="list-group-item py-3">
+                            <div class="info-label">Adresse</div>
+                            <div class="info-value">{{ membre.adresse }}</div>
+                        </li>
+                    </ul>
+                    <div class="d-flex justify-content-end">
+                        <a href="#" class="btn btn-success btn-sm px-3">Modifier</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Liste des chiens -->
+        <div class="col-md-7">
+            <div class="card card-soft">
+                <div class="card-body">
+
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <h4 class="card-title mb-0">🐶 Vos chiens</h4>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge text-bg-primary rounded-pill px-3 py-2">{{ membre.chiens|length }}</span>
+                            <a href="#" class="btn btn-success btn-sm px-3">+ Ajouter</a>
+                        </div>
+                    </div>
+
+                    <div class="pe-1" style="max-height: 500px; overflow-y:auto;">
+
+                        {% for chien in membre.chiens %}
+
+                            <div class="dog-card mb-3">
+                                <div class="card-body">
+
+                                    <div class="row g-3 align-items-center">
+                                        <div class="col-md-8">
+
+                                            <h5 class="card-title mb-2">{{ chien.nomChien }}</h5>
+
+                                            <div class="d-flex flex-wrap gap-2">
+                                                <span class="badge text-bg-light border">Race : {{ chien.race }}</span>
+                                                <span class="badge text-bg-light border">Âge : {{ chien.age }}</span>
+                                                <span class="badge text-bg-light border">Sexe : {{ chien.sexe }}</span>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-4 text-md-end d-flex align-items-center justify-content-md-end gap-2">
+
+                                            <a href="#" class="btn btn-primary btn-sm px-3">
+                                                Modifier
+                                            </a>
+
+                                            <a href="#" class="btn btn-outline-danger btn-sm">
+                                                Supprimer
+                                            </a>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        {% else %}
+
+                            <div class="alert alert-info border-0 mb-0">
+                                Vous n'avez pas encore de chien enregistré.
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 </div>
+
 {% endblock %}
