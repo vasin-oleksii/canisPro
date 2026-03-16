@@ -18,19 +18,6 @@
                     </a>
                 </li>
 
-                {#{% if is_granted('ROLE_ADMIN') %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('admin') }}" style="padding-right:0 !important;">
-                            Admin
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_fournisseur') }}" style="padding-right:0 !important;">
-                            Fournisseur
-                        </a>
-                    </li>
-                {% endif %}
-
                 {% if is_granted('ROLE_USER') %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_membre') }}" style="padding-right:0 !important;">
@@ -52,8 +39,21 @@
                     </li>
                 {% else %}
                     <li class="nav-item d-flex align-items-center ms-3">
-                        <a class="nav-link" href="{{ path('app_logout') }}">
+                        <a class="nav-link" href="{{ path('app_login') }}">
                             Connexion
+                        </a>
+                    </li>
+                {% endif %}
+
+                {#{% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('admin') }}" style="padding-right:0 !important;">
+                            Admin
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_fournisseur') }}" style="padding-right:0 !important;">
+                            Fournisseur
                         </a>
                     </li>
                 {% endif %}#}
