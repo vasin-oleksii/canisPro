@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\CourRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -15,9 +16,17 @@ final class AccueilController extends AbstractController
     }
 
     #[Route('/liste-des-cours', name: 'app_liste_cours')]
-    public function listeCours(): Response
+    public function listeCours(CourRepository $repository): Response
     {
-        return $this->render('accueil/listeCours.html.twig');
+        $cours = $repository->findAll();
+        return $this->render('accueil/listeCours.html.twig', ['cours' => $cours]);
+    }
+
+    #[Route('/details-cour-{id}', name: 'app_details_cour')]
+    public function detailsCour(CourRepository $repository, int $id): Response
+    {
+        $cour = $repository->find($id);
+        return $this->render('accueil/detailsCour.html.twig', ['cour' => $cour]);
     }
 
     #[Route('/a-propos', name: 'app_a_propos')]
