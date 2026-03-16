@@ -1,0 +1,49 @@
+{# templates/seance/seance.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la séance {{ seance.id }}{% endblock %}
+
+{% block body %}
+<main role="main" style="margin-top: 32px;">
+
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">Séance {{ seance.id }}</h1>
+            <p class="lead text-muted">Retrouvez les détails de cette séance</p>
+        </div>
+    </section>
+
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-8 offset-md-2">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body">
+                            <p><strong>Date :</strong> {{ seance.date|date('d/m/Y') }}</p>
+                            <p><strong>Heure de début :</strong> {{ seance.heureDeb|date('H:i') }}</p>
+                            <p><strong>Durée :</strong> {{ seance.duree|date('H:i') }}</p>
+                            <p><strong>Cours :</strong> {{ seance.cour.nom }}</p>
+
+                            {% if seance.inscriptions|length > 0 %}
+                                <h5>Inscriptions :</h5>
+                                <ul>
+                                    {% for inscription in seance.inscriptions %}
+                                        <li>{{ inscription.id }} - {{ inscription.nomUtilisateur }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p>Aucune inscription pour cette séance.</p>
+                            {% endif %}
+
+                            <a href="{{ path('app_seance_index') }}" class="btn btn-primary mt-3">Retour à la liste des séances</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</main>
+{% endblock %}

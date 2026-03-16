@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\CourRepository;
+use App\Repository\SeanceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -33,5 +34,12 @@ final class AccueilController extends AbstractController
     public function aPropos(): Response
     {
         return $this->render('accueil/aPropos.html.twig');
+    }
+
+    #[Route('/seance/{id}', name: 'app_seance')]
+    public function seance(int $id, SeanceRepository $repository): Response
+    {
+        $seance = $repository->find($id);
+        return $this->render('seance/seance.html.twig', ['seance' => $seance]);
     }
 }
