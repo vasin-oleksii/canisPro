@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Seance index{% endblock %}
+
+{% block body %}
+    <h1>Seance index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Heure de début</th>
+                <th>Durée</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for seance in seances %}
+            <tr>
+                <td>{{ seance.date ? seance.date|date('d/m/Y') : '' }}</td>
+                <td>{{ seance.heureDeb ? seance.heureDeb|date('H:i') : '' }}</td>
+                <td>{{ seance.duree ? seance.duree|date('H:i') : '' }}</td>
+                <td>{{ seance.cour.type.nbPlaces - seance.inscriptions|length > 0 ? 'Disponible' : 'Complet' }}</td>
+                <td>
+                    <a href="{{ path('app_details_seance', {'id': seance.id}) }}">Détails</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">Aucune séance</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

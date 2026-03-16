@@ -30,16 +30,23 @@ final class AccueilController extends AbstractController
         return $this->render('accueil/detailsCour.html.twig', ['cour' => $cour]);
     }
 
+    #[Route('/liste-des-seances', name: 'app_liste_seances')]
+    public function listeSeances(SeanceRepository $repository): Response
+    {
+        $seances = $repository->findAll();
+        return $this->render('accueil/listeSeances.html.twig', ['seances' => $seances]);
+    }
+
+    #[Route('/details-seances-{id}', name: 'app_details_seance')]
+    public function seance(int $id, SeanceRepository $repository): Response
+    {
+        $seance = $repository->find($id);
+        return $this->render('accueil/detailsSeance.html.twig', ['seance' => $seance]);
+    }
+
     #[Route('/a-propos', name: 'app_a_propos')]
     public function aPropos(): Response
     {
         return $this->render('accueil/aPropos.html.twig');
-    }
-
-    #[Route('/seance/{id}', name: 'app_seance')]
-    public function seance(int $id, SeanceRepository $repository): Response
-    {
-        $seance = $repository->find($id);
-        return $this->render('seance/seance.html.twig', ['seance' => $seance]);
     }
 }
