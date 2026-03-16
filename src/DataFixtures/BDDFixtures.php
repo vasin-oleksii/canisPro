@@ -56,9 +56,9 @@ class BDDFixtures extends Fixture
 
         //Tableau de données pour les Cours
         $coursData = [
-            ['Test1', 10.4, 'Ceci est la description du Test1', 'individuels', 'chiot'],
-            ['Test2', 20.99, 'Ceci est la description du Test2', 'collectifs', 'débutant'],
-            ['Test3', 0.99, 'Ceci est la description du Test3', 'collectifs', 'confirmé'],
+            ['Sociabilisation', 10.4, 'Ceci est la description du Sociabilisation', 'individuels', 'chiot'],
+            ['Obeissance', 20.99, 'Ceci est la description du Obeissance', 'collectifs', 'débutant'],
+            ['Agility', 0.99, 'Ceci est la description du Agility', 'collectifs', 'confirmé'],
         ];
 
         foreach ($coursData as $data) {

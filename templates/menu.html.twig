@@ -12,11 +12,6 @@
                         Liste des Cours
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_a_propos') }}" style="padding-right:0 !important;">
-                        À Propos
-                    </a>
-                </li>
 
                 {% if is_granted('ROLE_USER') %}
                     <li class="nav-item">
@@ -25,14 +20,12 @@
                         </a>
                     </li>
                 {% endif %}
-
-                {% if is_granted('ROLE_USER') %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" style="padding-right:0 !important;">
-                            Mes chiens
-                        </a>
-                    </li>
-                {% endif %}
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_a_propos') }}" style="padding-right:0 !important;">
+                        À Propos
+                    </a>
+                </li>
 
                 {% if app.user %}
                     <li class="nav-item d-flex align-items-center ms-3">

@@ -28,7 +28,7 @@
                             <p><strong>Niveau du cour :</strong> {{ seance.cour.niveau.libelleNiveau }}</p>
                             <p><strong>Nombre de places restantes :</strong> {{ seance.cour.type.nbPlaces - seance.inscriptions|length }}</p>
 
-                            <a href="{{ path('app_liste_seances') }}" class="btn btn-primary mt-3">Retour à la liste des séances</a>
+                            <a href="javascript:history.back()" class="btn btn-primary mt-3">Retour à la liste des séances</a>
                         </div>
                     </div>
                 </div>

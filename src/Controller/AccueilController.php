@@ -7,6 +7,7 @@ use App\Repository\SeanceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 final class AccueilController extends AbstractController
 {
@@ -31,9 +32,10 @@ final class AccueilController extends AbstractController
     }
 
     #[Route('/liste-des-seances', name: 'app_liste_seances')]
-    public function listeSeances(SeanceRepository $repository): Response
+    public function listeSeances(SeanceRepository $repository, Request $request): Response
     {
-        $seances = $repository->findAll();
+        $id = $request->query->get('id');
+        $seances = $repository->findBy(['cour' => $id]);
         return $this->render('accueil/listeSeances.html.twig', ['seances' => $seances]);
     }
 
@@ -41,7 +43,7 @@ final class AccueilController extends AbstractController
     public function seance(int $id, SeanceRepository $repository): Response
     {
         $seance = $repository->find($id);
-        return $this->render('accueil/detailsSeance.html.twig', ['seance' => $seance]);
+        return $this->render('accueil/detailsSeance.html.twig', ['seance' => $seance, 'id' => $id]);
     }
 
     #[Route('/a-propos', name: 'app_a_propos')]
