@@ -20,6 +20,19 @@
                         </a>
                     </li>
                 {% endif %}
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding-right:0 !important;">
+                            Gestion
+                        </a>
+                        <ul class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item text-white" href="{{ path('app_admin_chien_index')}}">Gestion des chiens</a></li>
+                            <li><a class="dropdown-item text-white" href="#">Choix 2</a></li>
+                            <li><a class="dropdown-item text-white" href="#">Choix 3</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
                 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('app_a_propos') }}" style="padding-right:0 !important;">
@@ -45,19 +58,6 @@
                         </a>
                     </li>
                 {% endif %}
-
-                {#{% if is_granted('ROLE_ADMIN') %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('admin') }}" style="padding-right:0 !important;">
-                            Admin
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_fournisseur') }}" style="padding-right:0 !important;">
-                            Fournisseur
-                        </a>
-                    </li>
-                {% endif %}#}
             </ul>
         </div>
     </nav>

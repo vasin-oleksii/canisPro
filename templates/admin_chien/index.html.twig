@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chien index{% endblock %}
+
+{% block body %}
+    <h1>Chien index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Race</th>
+                <th>NomChien</th>
+                <th>Age</th>
+                <th>Sexe</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for chien in chiens %}
+            <tr>
+                <td>{{ chien.id }}</td>
+                <td>{{ chien.race }}</td>
+                <td>{{ chien.nomChien }}</td>
+                <td>{{ chien.age }}</td>
+                <td>{{ chien.sexe }}</td>
+                <td>
+                    <a href="{{ path('app_admin_chien_show', {'id': chien.id}) }}">show</a>
+                    <a href="{{ path('app_admin_chien_edit', {'id': chien.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_admin_chien_new') }}">Create new</a>
+{% endblock %}
