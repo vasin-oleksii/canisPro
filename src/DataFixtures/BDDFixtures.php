@@ -110,8 +110,8 @@ class BDDFixtures extends Fixture
 
         //Tableau de données pour les Users
         $usersData = [
-            ["test@gmail.com", '$2y$13$0GgK5KF1t7mB9FZPse4DvemJkumBntkBtj6VoDA4nWkx/d26mjmhy', ["ROLE_USER"]], //password : test123
-            ["user@gmail.com", '$2y$13$eijWxR0MBJrqnruniWydN.oSW3MEIT5f6P7yWrNHjyKlyoyct35QO', ["ROLE_USER"]], //password : essai
+            ["test@gmail.com", '$2y$13$0GgK5KF1t7mB9FZPse4DvemJkumBntkBtj6VoDA4nWkx/d26mjmhy', ["ROLE_USERS"]], //password : test123
+            ["user@gmail.com", '$2y$13$eijWxR0MBJrqnruniWydN.oSW3MEIT5f6P7yWrNHjyKlyoyct35QO', ["ROLE_USERS"]], //password : essai
             ["admin@gmail.com", '$2y$13$oWF.36zexwb8zm.1u3LRROZjUuV/itOaD0DQmjbEzIVgaVjqrlCUe', ["ROLE_ADMIN"]], //password : admin
         ];
 
