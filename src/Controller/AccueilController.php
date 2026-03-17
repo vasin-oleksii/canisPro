@@ -57,7 +57,13 @@ final class AccueilController extends AbstractController
     #[Route('/ajouter-chien-{seanceId}', name: 'app_ajouter_chien', methods: ['GET', 'POST'])]
     public function ajouterChien(int $seanceId, Request $request, EntityManagerInterface $em, SeanceRepository $seanceRepo): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $seance = $seanceRepo->find($seanceId);
+        if (!$seance) {
+            throw $this->createNotFoundException('Séance introuvable.');
+        }
+
         $type = strtolower($seance->getCour()->getType()->getLibelleType());
         $count = $seance->getInscriptions()->count();
         
@@ -72,7 +78,10 @@ final class AccueilController extends AbstractController
         }
         
         $inscription = new Inscription();
-        $form = $this->createForm(InscriptionType::class, $inscription, ['seance' => $seance]);
+        $form = $this->createForm(InscriptionType::class, $inscription, [
+            'seance' => $seance,
+            'user' => $this->getUser(),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

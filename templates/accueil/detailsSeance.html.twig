@@ -49,11 +49,19 @@
                                 {% if seance.inscriptions|length >= 15 %}
                                     <button class="btn btn-success" disabled>Complet (15)</button>
                                 {% else %}
-                                    <a href="{{ path('app_ajouter_chien', {'seanceId': seanceId}) }}" class="btn btn-success">Ajouter chien</a>
+                                    {% if app.user %}
+                                        <a href="{{ path('app_ajouter_chien', {'seanceId': seanceId}) }}" class="btn btn-success">Ajouter chien</a>
+                                    {% else %}
+                                        <a href="{{ path('app_login') }}" class="btn btn-success">Ajouter chien</a>
+                                    {% endif %}
                                 {% endif %}
                             {% elseif type in ['individuels', 'individuel'] %}
                                 {% if seance.inscriptions|length == 0 %}
-                                    <a href="{{ path('app_ajouter_chien', {'seanceId': seanceId}) }}" class="btn btn-success">Ajouter chien</a>
+                                    {% if app.user %}
+                                        <a href="{{ path('app_ajouter_chien', {'seanceId': seanceId}) }}" class="btn btn-success">Ajouter chien</a>
+                                    {% else %}
+                                        <a href="{{ path('app_login') }}" class="btn btn-success">Ajouter chien</a>
+                                    {% endif %}
                                 {% else %}
                                     <button class="btn btn-success" disabled>1 chien max</button>
                                 {% endif %}
