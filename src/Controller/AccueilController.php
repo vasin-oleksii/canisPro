@@ -2,12 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Inscription;
+use App\Form\InscriptionType;
 use App\Repository\CourRepository;
 use App\Repository\SeanceRepository;
+use App\Repository\InscriptionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
 
 final class AccueilController extends AbstractController
 {
@@ -43,7 +47,66 @@ final class AccueilController extends AbstractController
     public function seance(int $id, SeanceRepository $repository): Response
     {
         $seance = $repository->find($id);
-        return $this->render('accueil/detailsSeance.html.twig', ['seance' => $seance, 'id' => $id]);
+        
+        return $this->render('accueil/detailsSeance.html.twig', [
+            'seance' => $seance,
+            'seanceId' => $id
+        ]);
+    }
+
+    #[Route('/ajouter-chien-{seanceId}', name: 'app_ajouter_chien', methods: ['GET', 'POST'])]
+    public function ajouterChien(int $seanceId, Request $request, EntityManagerInterface $em, SeanceRepository $seanceRepo): Response
+    {
+        $seance = $seanceRepo->find($seanceId);
+        $type = strtolower($seance->getCour()->getType()->getLibelleType());
+        $count = $seance->getInscriptions()->count();
+        
+        if ($type === 'individuels' && $count >= 1) {
+            $this->addFlash('error', 'Un seul chien par séance');
+            return $this->redirectToRoute('app_details_seance', ['id' => $seanceId]);
+        }
+        
+        if (in_array($type, ['collectif', 'collectifs']) && $count >= 15) {
+            $this->addFlash('error', 'Séance complète');
+            return $this->redirectToRoute('app_details_seance', ['id' => $seanceId]);
+        }
+        
+        $inscription = new Inscription();
+        $form = $this->createForm(InscriptionType::class, $inscription, ['seance' => $seance]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $inscription->setSeance($seance)->setDateInscription(new \DateTime());
+            $em->persist($inscription);
+            $em->flush();
+            
+            $this->addFlash('success', 'Chien inscrit!');
+            return $this->redirectToRoute('app_details_seance', ['id' => $seanceId]);
+        }
+        
+        return $this->render('accueil/ajouterChien.html.twig', ['form' => $form, 'seance' => $seance]);
+    }
+
+    #[Route('/retirer-chien-{inscriptionId}', name: 'app_retirer_chien')]
+    public function retirerChien(int $inscriptionId, EntityManagerInterface $em, InscriptionRepository $inscriptionRepo): Response
+    {
+        $inscription = $inscriptionRepo->find($inscriptionId);
+        if (!$inscription) {
+            $this->addFlash('error', 'Non trouvé');
+            return $this->redirectToRoute('app_accueil');
+        }
+        
+        $seanceId = $inscription->getSeance()->getId();
+        $isOwner = $inscription->getChien()->getProprietaire()->getUser() === $this->getUser();
+        
+        if (!$isOwner && !$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', 'Non autorisé');
+            return $this->redirectToRoute('app_details_seance', ['id' => $seanceId]);
+        }
+        
+        $em->remove($inscription)->flush();
+        $this->addFlash('success', 'Chien retiré!');
+        return $this->redirectToRoute('app_details_seance', ['id' => $seanceId]);
     }
 
     #[Route('/a-propos', name: 'app_a_propos')]
