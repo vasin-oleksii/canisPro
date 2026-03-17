@@ -28,7 +28,38 @@
                             <p><strong>Niveau du cour :</strong> {{ seance.cour.niveau.libelleNiveau }}</p>
                             <p><strong>Nombre de places restantes :</strong> {{ seance.cour.type.nbPlaces - seance.inscriptions|length }}</p>
 
-                            <a href="javascript:history.back()" class="btn btn-primary mt-3">Retour à la liste des séances</a>
+                            <h3 class="mt-4">Chiens inscrits</h3>
+                            {% if seance.inscriptions|length > 0 %}
+                                <ul>
+                                    {% for inscription in seance.inscriptions %}
+                                        {% if is_granted('ROLE_ADMIN') or (app.user and inscription.chien.proprietaire.user == app.user) %}
+                                            <li>
+                                                {{ inscription.chien.nomChien }} ({{ inscription.chien.race }})
+                                                <a href="{{ path('app_retirer_chien', {'inscriptionId': inscription.id}) }}" class="btn btn-danger btn-sm" onclick="return confirm('Retirer?')">✕</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p>Aucun chien</p>
+                            {% endif %}
+
+                            {% set type = seance.cour.type.libelleType|lower %}
+                            {% if type in ['collectif', 'collectifs'] %}
+                                {% if seance.inscriptions|length >= 15 %}
+                                    <button class="btn btn-success" disabled>Complet (15)</button>
+                                {% else %}
+                                    <a href="{{ path('app_ajouter_chien', {'seanceId': seanceId}) }}" class="btn btn-success">Ajouter chien</a>
+                                {% endif %}
+                            {% elseif type in ['individuels', 'individuel'] %}
+                                {% if seance.inscriptions|length == 0 %}
+                                    <a href="{{ path('app_ajouter_chien', {'seanceId': seanceId}) }}" class="btn btn-success">Ajouter chien</a>
+                                {% else %}
+                                    <button class="btn btn-success" disabled>1 chien max</button>
+                                {% endif %}
+                            {% endif %}
+
+                            <a href="javascript:history.back()" class="btn btn-primary">Retour</a>
                         </div>
                     </div>
                 </div>

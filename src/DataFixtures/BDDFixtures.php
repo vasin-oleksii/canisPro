@@ -81,11 +81,11 @@ class BDDFixtures extends Fixture
 
         //Tableau de données pour les Seances
         $seancesData = [
-            [new \DateTime('2008-09-08'), new \DateTime('14:00'), new \DateInterval('PT1H00M'), 'Test1'],
-            [new \DateTime('2008-09-10'), new \DateTime('19:00'), new \DateInterval('PT1H30M'), 'Test1'],
-            [new \DateTime('2008-09-12'), new \DateTime('8:00'), new \DateInterval('PT2H30M'), 'Test2'],
-            [new \DateTime('2008-09-12'), new \DateTime('10:00'), new \DateInterval('PT0H30M'), 'Test2'],
-            [new \DateTime('2008-09-15'), new \DateTime('11:11'), new \DateInterval('PT1H45M'), 'Test3'],
+            [new \DateTime('2008-09-08'), new \DateTime('14:00'), new \DateInterval('PT1H00M'), 'Sociabilisation'],
+            [new \DateTime('2008-09-10'), new \DateTime('19:00'), new \DateInterval('PT1H30M'), 'Sociabilisation'],
+            [new \DateTime('2008-09-12'), new \DateTime('8:00'), new \DateInterval('PT2H30M'), 'Obeissance'],
+            [new \DateTime('2008-09-12'), new \DateTime('10:00'), new \DateInterval('PT0H30M'), 'Obeissance'],
+            [new \DateTime('2008-09-15'), new \DateTime('11:11'), new \DateInterval('PT1H45M'), 'Agility'],
         ];
 
         foreach ($seancesData as $data) {
@@ -112,7 +112,7 @@ class BDDFixtures extends Fixture
         $usersData = [
             ["test@gmail.com", '$2y$13$0GgK5KF1t7mB9FZPse4DvemJkumBntkBtj6VoDA4nWkx/d26mjmhy', ["ROLE_USER"]], //password : test123
             ["user@gmail.com", '$2y$13$eijWxR0MBJrqnruniWydN.oSW3MEIT5f6P7yWrNHjyKlyoyct35QO', ["ROLE_USER"]], //password : essai
-            ["admin@gmail.com", '$2y$13$oWF.36zexwb8zm.1u3LRROZjUuV/itOaD0DQmjbEzIVgaVjqrlCUe', ["ROLE_ADMIN","ROLE_USER"]], //password : admin
+            ["admin@gmail.com", '$2y$13$oWF.36zexwb8zm.1u3LRROZjUuV/itOaD0DQmjbEzIVgaVjqrlCUe', ["ROLE_ADMIN"]], //password : admin
         ];
 
         foreach ($usersData as $data) {
