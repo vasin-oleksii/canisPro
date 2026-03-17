@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Espace Membre{% endblock %}
+
+{% block body %}
+
+<style>
+    .member-card { max-width: 760px; margin: 24px auto; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.08); overflow: hidden; }
+    .member-header { background: linear-gradient(90deg,#0c0b0c 0%, #0c0b0c 100%); color: #fff; padding: 20px; text-align: center; }
+    .member-header h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+    .member-body { padding: 22px; background: #fff; }
+    .form-group label { font-weight: 600; }
+    .form-control { border-radius: 8px; box-shadow: none; border: 1px solid #dfe7ef; }
+    .btn-primary { background: linear-gradient(90deg,#0c0b0c,#0c0b0c); border: none; padding: 10px 18px; border-radius: 8px; }
+    .btn-primary:hover { filter: brightness(0.95); }
+    @media (max-width: 576px) { .member-card { margin: 12px; } }
+</style>
+
+<div class="container py-3">
+    <div class="member-card">
+        <div class="member-header">
+            {% if membre %}
+                <h1>Modification de {{ membre.nom }} {{ membre.prenom }}</h1>
+            {% else %}
+                <h1>Aucun membre trouvé.</h1>
+            {% endif %}
+        </div>
+
+        <div class="member-body">
+            <div class="row">
+                <div class="col-12">
+                    {{ form_start(form) }}
+                        <div class="mb-3">{{ form_row(form.nom) }}</div>
+                        <div class="mb-3">{{ form_row(form.prenom) }}</div>
+                        <div class="mb-3">{{ form_row(form.tel) }}</div>
+                        <div class="mb-3">{{ form_row(form.adresse) }}</div>
+                        <div class="mt-3 text-end">
+                            <button type="submit" class="btn btn-primary">Valider les modifications</button>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
