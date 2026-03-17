@@ -24,7 +24,7 @@
                 {% if is_granted('ROLE_ADMIN') %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding-right:0 !important;">
-                            Gestion {{ app.user.getRoles()[1]}}
+                            Gestion
                         </a>
                         <ul class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item text-white" href="{{ path('app_admin_chien_index')}}">Gestion des chiens</a></li>
