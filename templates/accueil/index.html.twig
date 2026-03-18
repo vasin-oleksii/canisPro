@@ -58,7 +58,11 @@
             </div>
             <div class="card-footer bg-white border-0">
               {% if app.user %}
-                <a href="{{ path('app_membre') }}" class="btn btn-outline-primary w-100">Mon espace</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                  <p class="btn btn-outline-primary w-100">Impossible pour l'Admin</p>
+                {% else %}
+                  <a href="{{ path('app_membre') }}" class="btn btn-outline-primary w-100">Mon espace</a>
+                {% endif %}
               {% else %}
                 <a href="{{ path('app_login') }}" class="btn btn-outline-primary w-100">Se connecter</a>
               {% endif %}
