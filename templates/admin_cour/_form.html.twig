@@ -1,0 +1,35 @@
+{{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+
+<div class="mb-3">
+    {{ form_label(form.nomCour, 'Nom du cours', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.nomCour, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.nomCour) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.description) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.prix, 'Prix', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.prix, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.prix) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.type) }}
+    {{ form_widget(form.type) }}
+    {{ form_errors(form.type) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.niveau) }}
+    {{ form_widget(form.niveau) }}
+    {{ form_errors(form.niveau) }}
+</div>
+
+<button class="btn btn-primary">{{ button_label|default('Valider') }}</button>
+
+{{ form_end(form) }}

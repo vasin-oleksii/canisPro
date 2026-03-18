@@ -41,14 +41,10 @@
                         <td>{{ seance.inscriptions|length }}</td>
                         <td>
                             <a href="{{ path('app_admin_seance_modif', {'id': seance.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
-                            {% if seance.inscriptions|length > 0 %}
-                                <button class="btn btn-danger btn-sm" disabled title="Impossible de supprimer une séance avec inscriptions">Supprimer</button>
-                            {% else %}
-                                <form method="post" action="{{ path('app_admin_seance_delete', {'id': seance.id}) }}" onsubmit="return confirm('Vous êtes sûr de vouloir supprimer cette séance ?');" style="display:inline-block;">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ seance.id) }}">
-                                    <button class="btn btn-danger btn-sm">Supprimer</button>
-                                </form>
-                            {% endif %}
+                            <form method="post" action="{{ path('app_admin_seance_delete', {'id': seance.id}) }}" onsubmit="return confirm('Vous êtes sûr de vouloir supprimer cette séance ?');" style="display:inline-block;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ seance.id) }}">
+                                <button class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
                         </td>
                     </tr>
                 {% else %}

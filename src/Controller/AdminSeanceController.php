@@ -69,23 +69,13 @@ final class AdminSeanceController extends AbstractController
 
     #[Route('/admin/seance/supprimer-{id}', name: 'app_admin_seance_delete', requirements: ['id' => '\\d+'], methods: ['POST'])]
     public function delete(Request $request, Seance $seance, EntityManagerInterface $entityManager): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
+    {  
         if ($this->isCsrfTokenValid('delete'.$seance->getId(), $request->getPayload()->getString('_token'))) {
-            if ($seance->getInscriptions()->count() > 0) {
-                $this->addFlash('danger', 'Suppression impossible : cette séance contient des inscriptions.');
-
-                return $this->redirectToRoute('app_admin_seance_index', [], Response::HTTP_SEE_OTHER);
-            }
-
-            try {
                 $entityManager->remove($seance);
                 $entityManager->flush();
                 $this->addFlash('success', 'Séance supprimée avec succès.');
-            } catch (ForeignKeyConstraintViolationException) {
-                $this->addFlash('danger', 'Suppression impossible : cette séance est liée à des inscriptions.');
-            }
+        } else {
+            $this->addFlash('danger', 'Erreur lors de la suppression.');
         }
 
         return $this->redirectToRoute('app_admin_seance_index', [], Response::HTTP_SEE_OTHER);

@@ -32,7 +32,7 @@ class Seance
     /**
      * @var Collection<int, Inscription>
      */
-    #[ORM\OneToMany(targetEntity: Inscription::class, mappedBy: 'seance')]
+    #[ORM\OneToMany(targetEntity: Inscription::class, mappedBy: 'seance', orphanRemoval: true, cascade: ['remove'])]
     private Collection $inscriptions;
 
     public function __construct()
