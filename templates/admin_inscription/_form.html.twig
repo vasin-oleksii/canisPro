@@ -1,0 +1,24 @@
+{{ form_start(form) }}
+
+{% if show_date %}
+    <div class="mb-3">
+        {{ form_label(form.dateInscription) }}
+        {{ form_widget(form.dateInscription) }}
+    </div>
+{% endif %}
+
+<div class="mb-3">
+    {{ form_label(form.seance) }}
+    {{ form_widget(form.seance) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.chien) }}
+    {{ form_widget(form.chien) }}
+</div>
+
+<button type="submit" class="btn btn-primary">
+    {{ button_label|default('Sauvegarder') }}
+</button>
+
+{{ form_end(form) }}

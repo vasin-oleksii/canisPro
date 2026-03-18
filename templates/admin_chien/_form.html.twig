@@ -1,28 +1,28 @@
 {{ form_start(form) }}
 
 <div class="mb-3">
-    {{ form_label(form.nomChien, 'Nom du chien') }}
-    {{ form_widget(form.nomChien, {'attr': {'class': 'form-control'}}) }}
+    {{ form_label(form.nomChien) }}
+    {{ form_widget(form.nomChien) }}
 </div>
 
 <div class="mb-3">
-    {{ form_label(form.race, 'Race') }}
-    {{ form_widget(form.race, {'attr': {'class': 'form-control'}}) }}
+    {{ form_label(form.race) }}
+    {{ form_widget(form.race) }}
 </div>
 
 <div class="mb-3">
-    {{ form_label(form.age, 'Âge') }}
-    {{ form_widget(form.age, {'attr': {'class': 'form-control'}}) }}
+    {{ form_label(form.age) }}
+    {{ form_widget(form.age) }}
 </div>
 
 <div class="mb-3">
-    {{ form_label(form.sexe, 'Sexe') }}
-    {{ form_widget(form.sexe, {'attr': {'class': 'form-select'}}) }}
+    {{ form_label(form.sexe) }}
+    {{ form_widget(form.sexe) }}
 </div>
 
 <div class="mb-3">
-    {{ form_label(form.proprietaire, 'Propriétaire') }}
-    {{ form_widget(form.proprietaire, {'attr': {'class': 'form-select'}}) }}
+    {{ form_label(form.proprietaire) }}
+    {{ form_widget(form.proprietaire) }}
 </div>
 
 <button type="submit" class="btn btn-primary">

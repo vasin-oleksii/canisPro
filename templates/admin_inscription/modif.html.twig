@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier l'Inscription{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4">Modifier l'Inscription</h1>
+
+    <a href="{{ path('app_admin_inscription_index') }}" class="btn btn-secondary mt-3">Retour</a>
+
+    {{ include('admin_inscription/_form.html.twig', {'button_label': 'Modifier'}) }}
+{% endblock %}

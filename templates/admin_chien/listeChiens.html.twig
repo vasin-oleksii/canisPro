@@ -29,13 +29,7 @@
                         <td>{{ chien.nomChien }}</td>
                         <td>{{ chien.age }}</td>
                         <td>{{ chien.sexe }}</td>
-                        <td>
-                            {% if chien.proprietaire %}
-                                {{ chien.proprietaire.nom }} ({{ chien.proprietaire.mail }})
-                            {% else %}
-                                <span class="text-muted">Aucun</span>
-                            {% endif %}
-                        </td>
+                        <td>{{ chien.proprietaire.nom }} ({{ chien.proprietaire.mail }})</td>
                         <td>
                             <a href="{{ path('app_admin_chien_modif', {'id': chien.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
                             <form method="post" action="{{ path('app_admin_chien_delete', {'id': chien.id}) }}" onsubmit="return confirm('Vous êtes sûr de vouloir supprimer ce chien ?');" style="display:inline-block;">
