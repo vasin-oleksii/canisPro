@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier - Proprietaire{% endblock %}
+
+{% block body %}
+    <h1>Modifier proprietaire</h1>
+
+    {{ include('admin_proprietaire/_form.html.twig', {'button_label': 'Valider'}) }}
+
+    <a href="{{ path('app_admin_proprietaire_index') }}">Retour</a>
+
+    {{ include('admin_proprietaire/_delete_form.html.twig') }}
+{% endblock %}

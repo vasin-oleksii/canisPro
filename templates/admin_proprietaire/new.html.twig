@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Crée - Proprietaire{% endblock %}
+
+{% block body %}
+    <h1>Crée un proprietaire</h1>
+
+    {{ include('admin_proprietaire/_form.html.twig') }}
+
+    <a href="{{ path('app_admin_proprietaire_index') }}">Retour</a>
+{% endblock %}

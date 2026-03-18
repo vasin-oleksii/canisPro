@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Proprietaire;
+use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,8 +16,13 @@ class ProprietaireType extends AbstractType
         $builder
             ->add('nom')
             ->add('prenom')
+            ->add('mail')
             ->add('tel')
             ->add('adresse')
+            ->add('user', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'id',
+            ])
         ;
     }
 
