@@ -47,6 +47,10 @@
         <h2 class="mb-2">Bienvenue {{ membre.prenom }} {{ membre.nom }} 👋</h2>
         <p class="mb-0 opacity-75">Retrouvez ici vos informations personnelles et la fiche de vos compagnons.</p>
     </div>
+    
+    {% for message in app.session.flashbag.get('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
 
     <div class="row g-4">
 
@@ -94,7 +98,7 @@
                         <h4 class="card-title mb-0">🐶 Vos chiens</h4>
                         <div class="d-flex align-items-center gap-2">
                             <span class="badge text-bg-primary rounded-pill px-3 py-2">{{ membre.chiens|length }}</span>
-                            <a href="#" class="btn btn-success btn-sm px-3">+ Ajouter</a>
+                            <a href="{{path('app_chien_ajout')}}" class="btn btn-success btn-sm px-3">+ Ajouter</a>
                         </div>
                     </div>
 
@@ -120,13 +124,15 @@
 
                                         <div class="col-md-4 text-md-end d-flex align-items-center justify-content-md-end gap-2">
 
-                                            <a href="#" class="btn btn-primary btn-sm px-3">
+                                            <a href="{{ path('app_chien_modification', {'id':chien.id})}}" class="btn btn-primary btn-sm px-3">
                                                 Modifier
                                             </a>
-
-                                            <a href="#" class="btn btn-outline-danger btn-sm">
-                                                Supprimer
-                                            </a>
+                                            
+                                            <form method="POST" action="{{ path('app_chien_suppression', {'id': chien.id})}}" 
+                                            onsubmit="return confirm('Voulez-vous vraiment supprimer ce chien ?');">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('sup' ~ chien.id) }}">
+                                                <input type="submit" a class="btn btn-outline-danger btn-sm" value="Supprimer">
+                                            </form>
 
                                         </div>
                                     </div>

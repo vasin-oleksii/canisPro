@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <h1>
+        {% if isModif %}
+            Modification {{chien.nomChien}}
+        {% else %}
+            Ajout d'un chien
+        {% endif %}
+    </h1>
+    <a href="javascript:history.back()" class="btn btn-secondary mt-3">Retour</a>
+    <br>
+    <form method="post">
+        {{ form_start(form) }}
+        
+        <div class="mb-3">
+            {{ form_label(form.nomChien) }}
+            {{ form_widget(form.nomChien) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.race) }}
+            {{ form_widget(form.race) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.age) }}
+            {{ form_widget(form.age) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.sexe) }}
+            {{ form_widget(form.sexe) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+
+        {{ form_end(form) }}
+    </form>
+{% endblock %}
