@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier le chien{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4">Modifier le chien {{ chien.nomChien }}</h1>
+
+    <a href="{{ path('app_admin_chien_index') }}" class="btn btn-secondary mt-3">Retour</a>
+
+    {{ include('admin_chien/_form.html.twig', {'button_label': 'Modifier'}) }}
+</div>
+{% endblock %}

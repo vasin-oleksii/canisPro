@@ -31,7 +31,7 @@ class Chien
     /**
      * @var Collection<int, Inscription>
      */
-    #[ORM\OneToMany(targetEntity: Inscription::class, mappedBy: 'chien')]
+    #[ORM\OneToMany(targetEntity: Inscription::class, mappedBy: 'chien', orphanRemoval: true, cascade: ['remove'])]
     private Collection $inscriptions;
 
     #[ORM\ManyToOne(inversedBy: 'chiens')]

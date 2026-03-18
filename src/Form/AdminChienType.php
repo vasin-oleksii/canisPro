@@ -9,7 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class Chien1Type extends AbstractType
+class AdminChienType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -20,7 +20,10 @@ class Chien1Type extends AbstractType
             ->add('sexe')
             ->add('proprietaire', EntityType::class, [
                 'class' => Proprietaire::class,
-                'choice_label' => 'id',
+                'choice_label' => function (Proprietaire $proprietaire) {
+                    return sprintf('%d - %s (%s)', $proprietaire->getId(), $proprietaire->getNom(), $proprietaire->getMail());
+                },
+                'placeholder' => 'Choisissez un propriétaire',
             ])
         ;
     }

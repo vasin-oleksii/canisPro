@@ -130,7 +130,7 @@ class BDDFixtures extends Fixture
         //Tableau de données pour les Proprios
         $proprietairesData = [
             ["Test", 'Test', "test@gmail.com", "0000000000", "15 rue du test", "test@gmail.com"],
-            ["User", 'User', "admin@gmail.com", "0000000000", "15 rue du user", "user@gmail.com"],
+            ["User", 'User', "user@gmail.com", "0000000000", "15 rue du user", "user@gmail.com"],
         ];
 
         foreach ($proprietairesData as $data) {
