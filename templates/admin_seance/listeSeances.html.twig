@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des séances{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">Liste des séances</h1>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <a href="{{ path('app_admin_seance_ajout') }}" class="btn btn-success mb-3">Ajouter une séance</a>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Date</th>
+                    <th>Heure début</th>
+                    <th>Durée</th>
+                    <th>Cours</th>
+                    <th>Inscriptions</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for seance in seances %}
+                    <tr>
+                        <td>{{ seance.id }}</td>
+                        <td>{{ seance.date ? seance.date|date('d/m/Y') : '-' }}</td>
+                        <td>{{ seance.heureDeb ? seance.heureDeb|date('H:i') : '-' }}</td>
+                        <td>{{ seance.duree ? seance.duree|date('H:i') : '-' }}</td>
+                        <td>{{ seance.cour ? seance.cour.nomCour : '-' }}</td>
+                        <td>{{ seance.inscriptions|length }}</td>
+                        <td>
+                            <a href="{{ path('app_admin_seance_modif', {'id': seance.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
+                            {% if seance.inscriptions|length > 0 %}
+                                <button class="btn btn-danger btn-sm" disabled title="Impossible de supprimer une séance avec inscriptions">Supprimer</button>
+                            {% else %}
+                                <form method="post" action="{{ path('app_admin_seance_delete', {'id': seance.id}) }}" onsubmit="return confirm('Vous êtes sûr de vouloir supprimer cette séance ?');" style="display:inline-block;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ seance.id) }}">
+                                    <button class="btn btn-danger btn-sm">Supprimer</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center">Aucune séance trouvée</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

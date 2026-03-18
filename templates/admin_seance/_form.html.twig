@@ -1,0 +1,27 @@
+{{ form_start(form) }}
+
+<div class="mb-3">
+    {{ form_label(form.date, 'Date') }}
+    {{ form_widget(form.date, {'attr': {'class': 'form-control'}}) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.heureDeb, 'Heure de début') }}
+    {{ form_widget(form.heureDeb, {'attr': {'class': 'form-control'}}) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.duree, 'Durée') }}
+    {{ form_widget(form.duree, {'attr': {'class': 'form-control'}}) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.cour, 'Cours') }}
+    {{ form_widget(form.cour, {'attr': {'class': 'form-select'}}) }}
+</div>
+
+<button type="submit" class="btn btn-primary">
+    {{ button_label|default('Enregistrer') }}
+</button>
+
+{{ form_end(form) }}
