@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la séance{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4">Modifier la séance #{{ seance.id }}</h1>
+
+    <a href="{{ path('app_admin_seance_index') }}" class="btn btn-secondary mt-3">Retour</a>
+
+    {{ include('admin_seance/_form.html.twig', {'button_label': 'Modifier'}) }}
+</div>
+{% endblock %}
