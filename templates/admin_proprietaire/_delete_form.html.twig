@@ -1,4 +1,0 @@
-<form method="post" action="{{ path('app_admin_proprietaire_delete', {'id': proprietaire.id}) }}" onsubmit="return confirm('Confirmer la suppression?');">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ proprietaire.id) }}">
-    <button class="btn">Supprimer</button>
-</form>

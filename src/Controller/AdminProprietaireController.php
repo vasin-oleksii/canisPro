@@ -17,12 +17,12 @@ final class AdminProprietaireController extends AbstractController
     #[Route(name: 'app_admin_proprietaire_index', methods: ['GET'])]
     public function index(ProprietaireRepository $proprietaireRepository): Response
     {
-        return $this->render('admin_proprietaire/index.html.twig', [
+        return $this->render('admin_proprietaire/listeMembres.html.twig', [
             'proprietaires' => $proprietaireRepository->findAll(),
         ]);
     }
 
-    #[Route('/new', name: 'app_admin_proprietaire_new', methods: ['GET', 'POST'])]
+    #[Route('/admin/proprietaire/ajout', name: 'app_admin_proprietaire_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $proprietaire = new Proprietaire();
@@ -36,21 +36,13 @@ final class AdminProprietaireController extends AbstractController
             return $this->redirectToRoute('app_admin_proprietaire_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('admin_proprietaire/new.html.twig', [
+        return $this->render('admin_proprietaire/ajout.html.twig', [
             'proprietaire' => $proprietaire,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_admin_proprietaire_show', methods: ['GET'])]
-    public function show(Proprietaire $proprietaire): Response
-    {
-        return $this->render('admin_proprietaire/show.html.twig', [
-            'proprietaire' => $proprietaire,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_admin_proprietaire_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/{id}/edit', name: 'app_admin_proprietaire_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Proprietaire $proprietaire, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ProprietaireType::class, $proprietaire);
@@ -62,13 +54,13 @@ final class AdminProprietaireController extends AbstractController
             return $this->redirectToRoute('app_admin_proprietaire_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('admin_proprietaire/edit.html.twig', [
+        return $this->render('admin_proprietaire/modif.html.twig', [
             'proprietaire' => $proprietaire,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_admin_proprietaire_delete', methods: ['POST'])]
+    #[Route('/admin/{id}', name: 'app_admin_proprietaire_delete', methods: ['POST','GET'])]
     public function delete(Request $request, Proprietaire $proprietaire, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$proprietaire->getId(), $request->getPayload()->getString('_token'))) {

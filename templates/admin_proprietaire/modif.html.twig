@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier - Propriétaire{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Modifier Propriétaire</h3>
+                </div>
+                <div class="card-body">
+                    {{ include('admin_proprietaire/_form.html.twig', {'button_label': 'Valider'}) }}
+                    
+                    <a href="{{ path('app_admin_proprietaire_index') }}" class="btn btn-secondary mt-3">
+                        <i class="bi bi-arrow-left"></i> Retour
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

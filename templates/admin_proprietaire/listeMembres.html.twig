@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion - Propriétaire{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4">Gestion des propriétaires</h1>
+
+    <div class="mb-3 text-end">
+        <a href="{{ path('app_admin_proprietaire_new') }}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Créer un propriétaire
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Mail</th>
+                    <th>Téléphone</th>
+                    <th>Adresse</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for proprietaire in proprietaires %}
+                <tr>
+                    <td>{{ proprietaire.id }}</td>
+                    <td>{{ proprietaire.nom }}</td>
+                    <td>{{ proprietaire.prenom }}</td>
+                    <td>{{ proprietaire.mail }}</td>
+                    <td>{{ proprietaire.tel }}</td>
+                    <td>{{ proprietaire.adresse }}</td>
+                    <td class="d-flex gap-1">
+                        <!-- Formulaire suppression sécurisé POST -->
+                        <form method="post" 
+                              action="{{ path('app_admin_proprietaire_delete', {'id': proprietaire.id}) }}" 
+                              onsubmit="return confirm('Voulez-vous vraiment supprimer ce propriétaire ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ proprietaire.id) }}">
+                            <button class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i> Supprimer
+                            </button>
+                        </form>
+
+                        <!-- Bouton Modifier -->
+                        <a href="{{ path('app_admin_proprietaire_edit', {'id': proprietaire.id}) }}" 
+                           class="btn btn-primary btn-sm">
+                            <i class="bi bi-pencil"></i> Modifier
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7" class="text-center">Aucun propriétaire trouvé</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
