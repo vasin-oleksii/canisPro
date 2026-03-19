@@ -1,47 +1,102 @@
-{% extends 'base.html.twig' %}
+﻿{% extends 'base.html.twig' %}
 
 {% block title %}Espace Membre{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .member-edit-hero {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ffffff 100%);
+            border: 1px solid #ede9fe;
+            border-radius: 1.25rem;
+            box-shadow: 0 18px 40px rgba(109, 40, 217, .08);
+        }
+
+        .member-edit-panel,
+        .member-edit-side {
+            background: #fff;
+            border: 1px solid #ede9fe;
+            border-radius: 1rem;
+            box-shadow: 0 12px 30px rgba(109, 40, 217, .07);
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
-
-<style>
-    .member-card { max-width: 760px; margin: 24px auto; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.08); overflow: hidden; }
-    .member-header { background: linear-gradient(90deg,#0c0b0c 0%, #0c0b0c 100%); color: #fff; padding: 20px; text-align: center; }
-    .member-header h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
-    .member-body { padding: 22px; background: #fff; }
-    .form-group label { font-weight: 600; }
-    .form-control { border-radius: 8px; box-shadow: none; border: 1px solid #dfe7ef; }
-    .btn-primary { background: linear-gradient(90deg,#0c0b0c,#0c0b0c); border: none; padding: 10px 18px; border-radius: 8px; }
-    .btn-primary:hover { filter: brightness(0.95); }
-    @media (max-width: 576px) { .member-card { margin: 12px; } }
-</style>
-
-<div class="container py-3">
-    <div class="member-card">
-        <div class="member-header">
-            {% if membre %}
-                <h1>Modification de {{ membre.nom }} {{ membre.prenom }}</h1>
-            {% else %}
-                <h1>Aucun membre trouvé.</h1>
-            {% endif %}
+<div class="container py-4 py-lg-5">
+    <div class="member-edit-hero p-4 p-lg-5 mb-4">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                {% if membre %}
+                    <span class="badge text-bg-primary mb-3">Espace membre</span>
+                    <h1 class="fw-bold mb-3" style="color:#1e1b4b;">Modifier votre profil</h1>
+                    <p class="text-secondary mb-0">Mettez à jour vos coordonnées pour conserver un espace membre clair, fiable et toujours à jour.</p>
+                {% else %}
+                    <h1 class="fw-bold mb-0" style="color:#1e1b4b;">Aucun membre trouvé</h1>
+                {% endif %}
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{{ path('app_membre') }}" class="btn btn-outline-primary">Retour à l'espace membre</a>
+            </div>
         </div>
+    </div>
 
-        <div class="member-body">
-            <div class="row">
-                <div class="col-12">
-                    {{ form_start(form) }}
-                        <div class="mb-3">{{ form_row(form.nom) }}</div>
-                        <div class="mb-3">{{ form_row(form.prenom) }}</div>
-                        <div class="mb-3">{{ form_row(form.tel) }}</div>
-                        <div class="mb-3">{{ form_row(form.adresse) }}</div>
-                        <div class="mt-3 text-end">
-                            <button type="submit" class="btn btn-primary">Valider les modifications</button>
+    <div class="row g-4 align-items-start">
+        <div class="col-lg-8">
+            <div class="member-edit-panel p-4 p-lg-5">
+                {{ form_start(form) }}
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            {{ form_row(form.nom, {
+                                label_attr: { class: 'form-label fw-semibold mb-2', style: 'color:#1e1b4b;' },
+                                attr: { class: 'form-control form-control-lg', placeholder: 'Votre nom' }
+                            }) }}
                         </div>
-                    {{ form_end(form) }}
-                </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.prenom, {
+                                label_attr: { class: 'form-label fw-semibold mb-2', style: 'color:#1e1b4b;' },
+                                attr: { class: 'form-control form-control-lg', placeholder: 'Votre prénom' }
+                            }) }}
+                        </div>
+                        <div class="col-12">
+                            {{ form_row(form.mail, {
+                                label_attr: { class: 'form-label fw-semibold mb-2', style: 'color:#1e1b4b;' },
+                                attr: { class: 'form-control form-control-lg', placeholder: 'Votre adresse e-mail', disabled: 'disabled' }
+                            }) }}
+                            <div class="form-text" style="color:#6d28d9;">L'adresse e-mail ne peut pas être modifiée depuis cet espace.</div>
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.tel, {
+                                label_attr: { class: 'form-label fw-semibold mb-2', style: 'color:#1e1b4b;' },
+                                attr: { class: 'form-control form-control-lg', placeholder: 'Votre téléphone' }
+                            }) }}
+                        </div>
+                        <div class="col-12">
+                            {{ form_row(form.adresse, {
+                                label_attr: { class: 'form-label fw-semibold mb-2', style: 'color:#1e1b4b;' },
+                                attr: { class: 'form-control form-control-lg', placeholder: 'Votre adresse postale', rows: '3' }
+                            }) }}
+                        </div>
+                    </div>
+                    <div class="mt-4 d-flex flex-wrap gap-3 align-items-center">
+                        <button type="submit" class="btn btn-primary px-4 py-2">Valider les modifications</button>
+                        <span class="text-secondary small">Vos nouvelles informations seront visibles immédiatement dans votre espace membre.</span>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="member-edit-side p-4">
+                <h2 class="h5 fw-semibold mb-3" style="color:#1e1b4b;">Conseils</h2>
+                <ul class="text-secondary ps-3 mb-0">
+                    <li class="mb-2">Vérifiez vos coordonnées avant validation.</li>
+                    <li class="mb-2">Gardez un numéro de téléphone à jour.</li>
+                    <li class="mb-2">Renseignez une adresse complète et exploitable.</li>
+                    <li>Des informations correctes facilitent le suivi de vos chiens et inscriptions.</li>
+                    <li>Pour tout changement de mail, contactez notre support.</li>
+                </ul>
             </div>
         </div>
     </div>
 </div>
-
 {% endblock %}
