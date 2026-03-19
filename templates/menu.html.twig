@@ -15,10 +15,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_liste_cours') }}">Cours</a>
+                        <a class="nav-link" href="{{ path('app_liste_cours') }}">Liste des Cours</a>
                     </li>
 
-                    {% if is_granted('ROLE_USERS') %}
+                    {% if is_granted('ROLE_USERS') and not is_granted('ROLE_ADMIN') %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('app_membre') }}">Espace membre</a>
                         </li>
@@ -26,9 +26,7 @@
 
                     {% if is_granted('ROLE_ADMIN') %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Administration
-                            </a>
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Gestion</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{{ path('app_admin_chien_index') }}">Gestion des chiens</a></li>
                                 <li><a class="dropdown-item" href="{{ path('app_admin_proprietaire_index') }}">Gestion des membres</a></li>
@@ -45,9 +43,7 @@
 
                     {% if app.user %}
                         <li class="nav-item d-lg-flex align-items-center ms-lg-2">
-                            <span class="navbar-text me-lg-2 mb-2 mb-lg-0 px-2 py-1 rounded" style="font-size: 0.8rem; background: rgba(255,255,255,.16); color: #fff;">
-                                {{ app.user.userIdentifier }}
-                            </span>
+                            <span class="navbar-text me-lg-2 mb-2 mb-lg-0 px-2 py-1 rounded" style="font-size: 0.8rem; background: rgba(255,255,255,.16); color: #fff;">{{ app.user.userIdentifier }}</span>
                             <form action="{{ path('app_logout') }}" method="post" class="d-inline">
                                 <button type="submit" class="btn btn-light btn-sm">Déconnexion</button>
                             </form>

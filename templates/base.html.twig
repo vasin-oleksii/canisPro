@@ -275,7 +275,19 @@
                     <div class="col-6 col-md-4">
                         <h6 class="text-uppercase text-secondary">Compte</h6>
                         <ul class="list-unstyled mb-0">
-                            {% if app.user %}
+                            {% if app.user and is_granted('ROLE_ADMIN') %}
+                                <li>
+                                    <a class="link-light text-decoration-none" href="{{ path('app_admin_proprietaire_index') }}">Gestion</a>
+                                    <ul class="list-unstyled ps-3">
+                                        <li><a class="link-light text-decoration-none" href="{{ path('app_admin_chien_index') }}">Gestion des chiens</a></li>
+                                        <li><a class="link-light text-decoration-none" href="{{ path('app_admin_proprietaire_index') }}">Gestion des membres</a></li>
+                                        <li><a class="link-light text-decoration-none" href="{{ path('app_admin_inscription_index') }}">Gestion des inscriptions</a></li>
+                                        <li><a class="link-light text-decoration-none" href="{{ path('app_admin_cour_index') }}">Gestion des cours</a></li>
+                                        <li><a class="link-light text-decoration-none" href="{{ path('app_admin_seance_index') }}">Gestion des séances</a></li>
+                                    </ul>
+                                </li>
+                                <li><a class="link-light text-decoration-none" href="{{ path('app_logout') }}">Déconnexion</a></li>
+                            {% elseif app.user %}
                                 <li><a class="link-light text-decoration-none" href="{{ path('app_membre') }}">Espace membre</a></li>
                                 <li><a class="link-light text-decoration-none" href="{{ path('app_liste_cours') }}">Mes inscriptions</a></li>
                             {% else %}
