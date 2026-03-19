@@ -22,7 +22,7 @@ final class AdminCourController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/new/ajout', name: 'app_admin_cour_new', methods: ['GET', 'POST'])]
+    #[Route('/new/ajout', name: 'app_admin_cour_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $cour = new Cour();
@@ -42,7 +42,7 @@ final class AdminCourController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/{id}/edit', name: 'app_admin_cour_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_admin_cour_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Cour $cour, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(CourType::class, $cour);
@@ -60,7 +60,7 @@ final class AdminCourController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/{id}', name: 'app_admin_cour_delete', methods: ['POST','GET'])]
+    #[Route('/{id}', name: 'app_admin_cour_delete', methods: ['POST','GET'])]
     public function delete(Request $request, Cour $cour, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$cour->getId(), $request->getPayload()->getString('_token'))) {

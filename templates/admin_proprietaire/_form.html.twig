@@ -1,4 +1,37 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+<div class="mb-3">
+    {{ form_label(form.nom) }}
+    {{ form_widget(form.nom) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.prenom) }}
+    {{ form_widget(form.prenom) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.mail) }}
+    {{ form_widget(form.mail) }}
+</div>
+
+<div class="mb-3">
+    <label for="password">Mot de passe</label>
+    <input type="password" id="password" name="password" required>
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.tel) }}
+    {{ form_widget(form.tel) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.adresse) }}
+    {{ form_widget(form.adresse) }}
+</div>
+
+<button type="submit" class="btn btn-primary">
+    {{ button_label|default('Sauvegarder') }}
+</button>
+
 {{ form_end(form) }}

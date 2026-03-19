@@ -19,10 +19,6 @@ class ProprietaireType extends AbstractType
             ->add('mail')
             ->add('tel')
             ->add('adresse')
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
         ;
     }
 

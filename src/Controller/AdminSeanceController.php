@@ -25,7 +25,7 @@ final class AdminSeanceController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/seance/ajout', name: 'app_admin_seance_ajout', methods: ['GET', 'POST'])]
+    #[Route('/ajout', name: 'app_admin_seance_ajout', methods: ['GET', 'POST'])]
     public function ajout(Request $request, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -47,7 +47,7 @@ final class AdminSeanceController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/seance/modification-{id}', name: 'app_admin_seance_modif', requirements: ['id' => '\\d+'], methods: ['GET', 'POST'])]
+    #[Route('/modification-{id}', name: 'app_admin_seance_modif', requirements: ['id' => '\\d+'], methods: ['GET', 'POST'])]
     public function modif(Request $request, Seance $seance, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -67,7 +67,7 @@ final class AdminSeanceController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/seance/supprimer-{id}', name: 'app_admin_seance_delete', requirements: ['id' => '\\d+'], methods: ['POST'])]
+    #[Route('/supprimer-{id}', name: 'app_admin_seance_delete', requirements: ['id' => '\\d+'], methods: ['POST'])]
     public function delete(Request $request, Seance $seance, EntityManagerInterface $entityManager): Response
     {  
         if ($this->isCsrfTokenValid('delete'.$seance->getId(), $request->getPayload()->getString('_token'))) {

@@ -37,7 +37,7 @@ class Proprietaire
     /**
      * @var Collection<int, Chien>
      */
-    #[ORM\OneToMany(targetEntity: Chien::class, mappedBy: 'proprietaire')]
+    #[ORM\OneToMany(targetEntity: Chien::class, mappedBy: 'proprietaire', orphanRemoval: true, cascade: ['remove'])]
     private Collection $chiens;
 
     public function __construct()

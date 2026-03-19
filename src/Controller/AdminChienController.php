@@ -22,7 +22,7 @@ final class AdminChienController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/chien/ajout', name: 'app_admin_chien_ajout', methods: ['GET', 'POST'])]
+    #[Route('/ajout', name: 'app_admin_chien_ajout', methods: ['GET', 'POST'])]
     public function ajout(Request $request, EntityManagerInterface $entityManager): Response
     {
         $chien = new Chien();
@@ -42,7 +42,7 @@ final class AdminChienController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/chien/modification-{id}', name: 'app_admin_chien_modif', methods: ['GET', 'POST'])]
+    #[Route('/modification-{id}', name: 'app_admin_chien_modif', methods: ['GET', 'POST'])]
     public function modif(Request $request, Chien $chien, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(AdminChienType::class, $chien);
@@ -60,7 +60,7 @@ final class AdminChienController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/chien/supprimer-{id}', name: 'app_admin_chien_delete', methods: ['POST'])]
+    #[Route('/supprimer-{id}', name: 'app_admin_chien_delete', methods: ['POST'])]
     public function delete(Request $request, Chien $chien, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$chien->getId(), $request->getPayload()->getString('_token'))) {

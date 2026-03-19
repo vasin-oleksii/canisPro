@@ -23,7 +23,7 @@ final class AdminInscriptionController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/inscription/ajout', name: 'app_admin_inscription_ajout', methods: ['GET', 'POST'])]
+    #[Route('/ajout', name: 'app_admin_inscription_ajout', methods: ['GET', 'POST'])]
     public function ajout(Request $request, EntityManagerInterface $entityManager): Response
     {
         $inscription = new Inscription();
@@ -45,7 +45,7 @@ final class AdminInscriptionController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/inscription/modification-{id}', name: 'app_admin_inscription_modif', methods: ['GET', 'POST'])]
+    #[Route('/modification-{id}', name: 'app_admin_inscription_modif', methods: ['GET', 'POST'])]
     public function modif(Request $request, Inscription $inscription, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(AdminInscriptionType::class, $inscription, ['show_date' => true,]);
@@ -64,7 +64,7 @@ final class AdminInscriptionController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/inscription/supprimer-{id}', name: 'app_admin_inscription_delete', methods: ['POST'])]
+    #[Route('/supprimer-{id}', name: 'app_admin_inscription_delete', methods: ['POST'])]
     public function delete(Request $request, Inscription $inscription, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$inscription->getId(), $request->request->get('_token'))) {
