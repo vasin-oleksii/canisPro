@@ -1,256 +1,217 @@
-# CanisPro Éducation — E5 Revision Cheat Sheet (BTS SIO SLAM)
+# CanisPro Éducation — Symfony / Doctrine ops
 
-Short practical notes for the oral exam. Symfony, PHP 8.x, MVC, Doctrine, MySQL, Twig, Bootstrap.
+Stack: Symfony, PHP 8.x, Doctrine ORM, MySQL, Twig, Bootstrap. Roles: `ROLE_USER`, `ROLE_ADMIN`.
 
----
+**Seance (this repo)**
 
-## 1. Project summary
-
-- **CanisPro Éducation** is a web app for a canine education center.
-- Built with **Symfony** (MVC), **PHP 8.x**, **Doctrine ORM**, **MySQL**, **Twig**, **Bootstrap**.
-- **Public** visitors can browse **courses** (`Cour`) and **sessions** (`Seance`).
-- **Members** (`ROLE_USER`) manage their **dogs** (`Chien`) and **registrations** (`Inscription`).
-- **Admins** (`ROLE_ADMIN`) manage courses, sessions, users, and data.
-- **GitHub** for versioning; **ClickUp** for project management.
-
----
-
-## 2. Important Symfony files
-
-| What you change | Role | Typical paths (examples) |
-|-----------------|------|---------------------------|
-| **Entity** | PHP class mapped to a DB table; properties = columns / relations | `src/Entity/Seance.php`, `src/Entity/Cour.php` |
-| **Repository** | Custom queries (`findBy…`, DQL) | `src/Repository/SeanceRepository.php` |
-| **Controller** | HTTP actions: list, show, new, edit, delete | `src/Controller/SeanceController.php` |
-| **Form** | Fields, validation linked to an entity | `src/Form/SeanceType.php` |
-| **Twig template** | HTML + `{{ }}` display | `templates/seance/index.html.twig`, `new.html.twig`, `edit.html.twig` |
-| **Migration** | SQL diff for the database | `migrations/VersionXXXXXXXXXXXXXX.php` |
-| **Security config** | Roles, firewalls, access rules | `config/packages/security.yaml` |
-| **Routes** | URL → controller (often attributes on the controller) | `#[Route('/admin/seance', name: 'app_seance_')]` on methods, or `config/routes.yaml` |
-
-**Oral tip:** “I change the **entity** for the data model, **migration** for the database, **form** for input, **controller** for logic and HTTP, **Twig** for the page.”
+- `src/Entity/Seance.php`
+- `src/Form/SeanceType.php`
+- `src/Controller/AdminSeanceController.php` — routes under `/admin/seance` (`app_admin_seance_index`, `app_admin_seance_ajout`, `app_admin_seance_modif`, `app_admin_seance_delete`)
+- `templates/admin_seance/_form.html.twig`, `listeSeances.html.twig`, `ajout.html.twig`, `modif.html.twig`
+- `src/Repository/SeanceRepository.php`
+- `migrations/`
+- `config/packages/security.yaml`
 
 ---
 
-## 3. CRUD cheat sheet for `Seance`
+## Where to change what
 
-### CREATE
-
-- **What it does:** Shows a form to add a session; saves a new `Seance` in the database.
-- **Files:** `Seance` entity, `SeanceType` form, controller `new()` action, `templates/seance/new.html.twig`.
-- **Doctrine:** `$entityManager->persist($seance);` then `$entityManager->flush();`
-- **Command (scaffold):** `php bin/console make:crud Seance` (or `make:form` + manual controller).
-
-**Oral:** “Create uses a **form**, **persist** and **flush** to insert the row.”
-
----
-
-### READ
-
-- **What it does:** List all sessions or show one session.
-- **Files:** `SeanceRepository` (`findAll()`, `find($id)`), controller `index()` / `show()`, Twig table or detail page.
-- **Example:** `$seances = $seanceRepository->findAll();` return `render('seance/index.html.twig', ['seances' => $seances]);`
-
-**Oral:** “Read uses the **repository** to fetch data and **Twig** to display it.”
+| Task | Location |
+|------|----------|
+| New column / relation | `src/Entity/<Entity>.php` |
+| Queries | `src/Repository/<Entity>Repository.php` |
+| HTTP + routes | `src/Controller/*.php` |
+| Form fields | `src/Form/<Entity>Type.php` |
+| Pages | `templates/**/*.html.twig` |
+| DB diff | `php bin/console make:migration` → `migrations/Version*.php` |
+| Access | `config/packages/security.yaml` |
 
 ---
 
-### UPDATE
+## Seance CRUD (this controller)
 
-- **What it does:** Load an existing `Seance`, show the same form pre-filled, save changes.
-- **Files:** Controller `edit($id)`, same `SeanceType`, `edit.html.twig`.
-- **Doctrine:** get entity, handle form submit, `flush()` (no `persist` needed if entity is already managed).
-
-**Oral:** “Update reuses the **create form**; after submit I **flush** to apply changes.”
-
----
-
-### DELETE
-
-- **What it does:** Remove a session from the database (and related rules if any).
-- **Files:** Controller `delete()` (POST), optional confirm form with **CSRF** token.
-- **Doctrine:** `$entityManager->remove($seance);` then `$entityManager->flush();`
-
-**Oral:** “Delete uses **POST**, a **CSRF token** to avoid forgery, then **remove** and **flush**.”
+| Action | Method | Doctrine |
+|--------|--------|----------|
+| List | `AdminSeanceController::listeSeances` — `findBy([], ['date' => 'ASC', 'heureDeb' => 'ASC'])` | read |
+| Ajout | `ajout` — `createForm(SeanceType::class, $seance)` | `persist` + `flush` |
+| Modif | `modif` — same form on existing `Seance` | `flush` |
+| Supprimer | `delete` — CSRF `delete{ id }` | `remove` + `flush` |
 
 ---
 
-## 4. Example: adding a new field to `Seance`
+## Symfony Maker: commands vs manual edits
 
-**Goal:** Add **`capacity`** (e.g. max participants per session).
+| Goal | Command | What Maker writes |
+|------|---------|-------------------|
+| New field / relation on an entity | `php bin/console make:entity Seance` | Property, `#[ORM\…]`, getters/setters (+ inverse relation if you answer yes) |
+| Migration SQL from mapping vs DB | `php bin/console make:migration` | `migrations/Version*.php` — **read before** `migrate` |
+| Apply DB changes | `php bin/console doctrine:migrations:migrate` | Executes migration |
+| Scaffold CRUD | `php bin/console make:crud Seance` | Controller + Form + Twig — **can overwrite** existing code; avoid on this project if you already use `AdminSeanceController` |
+| New empty form class | `php bin/console make:form` | New `*Type.php` — does **not** add one line into your current `SeanceType` |
 
-1. **Modify entity `Seance`** — add a property (e.g. `private ?int $capacity = null;` or `int` if required).
-2. **Add property** `capacity` with correct type and nullable rule.
-3. **Generate getter/setter** — IDE or `php bin/console make:entity Seance` to add the field interactively.
-4. **Create migration:** `php bin/console make:migration` then review the generated file in `migrations/`.
-5. **Run migration:** `php bin/console doctrine:migrations:migrate`
-6. **Add field in `SeanceType`:** map `capacity` to a form type (`IntegerType`, etc.).
-7. **Display in Twig:** `{{ seance.capacity }}` in show/list/edit templates as needed.
-8. **Validation:** add `#[Assert\Positive]` or `#[Assert\NotNull]` on the property if business rules require it.
+**CanisPro:** use **Maker for entity + migrations**. **Form / Twig / fixtures** stay manual: Symfony has no built-in command that inserts a single `form_row` into `templates/admin_seance/_form.html.twig`.
 
-**Entity (PHP property example):**
+---
 
-```php
-#[ORM\Column(nullable: true)]
-private ?int $capacity = null;
+## Example: add `placesMax` on `Seance` (entity via Maker)
 
-public function getCapacity(): ?int { return $this->capacity; }
-public function setCapacity(?int $capacity): static { $this->capacity = $capacity; return $this; }
+**1. Entity (Maker — no hand-written property):**
+
+```bash
+cd /Users/vasin/Desktop/canisPro
+php bin/console make:entity Seance
 ```
 
-**Form (`SeanceType.php` example):**
+Typical answers (labels may differ slightly by version):
 
-```php
-->add('capacity', IntegerType::class, [
-    'required' => false,
-    'label' => 'Capacity',
-])
-```
+- API Platform resource? → **no**
+- Add field to `Seance`? → **yes**
+- Field name → **`placesMax`**
+- Type → **`integer`** (use **`?`** for the full list if needed)
+- Nullable? → **yes** / **no**
+- Add another field? → **no**
 
-**Twig (example):**
+Result: `src/Entity/Seance.php` updated by Maker.
 
-```twig
-<p>Capacity: {{ seance.capacity ?? '—' }}</p>
-```
-
-**Commands:**
+**2. DB (commands only):**
 
 ```bash
 php bin/console make:migration
 php bin/console doctrine:migrations:migrate
 ```
 
----
+Open the generated `migrations/Version*.php` and confirm `ADD` column, then migrate.
 
-## 5. Example: deleting a field from `Seance`
+**3. UI + data (manual — no Maker for these in your layout):**
 
-**Goal:** Remove **`capacity`** from `Seance`.
+- `src/Form/SeanceType.php` — `use IntegerType;` + `->add('placesMax', IntegerType::class, ['required' => false, 'label' => 'Places maximum', …])` after `duree`, before `cour`.
+- `templates/admin_seance/_form.html.twig` — `form_row(form.placesMax, …)` like other fields.
+- `templates/admin_seance/listeSeances.html.twig` — `<th>Places max</th>`, cell `{{ seance.placesMax ?? '—' }}`, empty row `colspan` **7 → 8**.
+- `src/DataFixtures/BDDFixtures.php` — optional `->setPlacesMax(10)` after `setCour`.
 
-1. **Entity:** remove the `$capacity` property and **getters/setters**.
-2. **Form (`SeanceType`):** remove `->add('capacity', ...)`.
-3. **Controller:** remove any code that reads/writes `$seance->getCapacity()` / `setCapacity()`.
-4. **Twig:** remove `{{ seance.capacity }}` and any labels/inputs for capacity.
-5. **Database:** `php bin/console make:migration` — migration should **DROP COLUMN** `capacity` (check the file before running).
-6. **Run:** `php bin/console doctrine:migrations:migrate`
-7. **Test:** list, show, create, edit pages for `Seance`.
-
-**Checklist when deleting:**
-
-| Layer | Remove |
-|--------|--------|
-| **Entity** | Property + accessors |
-| **Form** | Form field |
-| **Controller** | Logic using the field |
-| **Twig** | Display / form fragments |
-| **DB** | Column via **migration** (do not only delete PHP — DB must match) |
+**4. Optional:** `#[Assert\PositiveOrZero]` on `$placesMax` in the entity file. Controller unchanged if only `SeanceType` binds the field.
 
 ---
 
-## 6. Example: creating a relation
+## Example: remove `placesMax` from `Seance`
 
-**Business rule:** A **Seance** belongs to **one Cour**. A **Cour** has **many Seances**.
+Maker does **not** remove fields in the standard wizard — delete the mapping in PHP, then use migrations.
 
-- **Cardinality:** Cour **1,N** Seance (one course, many sessions).
-- **Doctrine:**
-  - `Seance` **ManyToOne** `Cour` (foreign key on `seance` table, e.g. `cour_id`).
-  - `Cour` **OneToMany** `Seance` (inverse side: collection `$seances`).
+1. Edit **`src/Entity/Seance.php`** — remove `$placesMax` + getter/setter.
+2. Remove usages: `SeanceType`, `_form.html.twig`, `listeSeances.html.twig`, `BDDFixtures.php`.
+3. **Commands:**
 
-**Command:**
+```bash
+php bin/console make:migration
+php bin/console doctrine:migrations:migrate
+```
+
+Check migration for `DROP` column. Grep: `placesMax`, `places_max`.
+
+---
+
+## `Seance` → `Cour` (already wired in CanisPro)
+
+**Entity `src/Entity/Seance.php`:**
+
+```php
+    #[ORM\ManyToOne(inversedBy: 'seances')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Cour $cour = null;
+```
+
+**Entity `src/Entity/Cour.php`:** `OneToMany` `Seance`, `mappedBy: 'cour'`.
+
+**Form `src/Form/SeanceType.php`:**
+
+```php
+            ->add('cour', EntityType::class, [
+                'class' => Cour::class,
+                'choice_label' => 'nomCour',
+            ])
+```
+
+**Twig:** `{{ seance.cour ? seance.cour.nomCour : '-' }}` (`listeSeances.html.twig`). Public side uses `seance.cour.nomCour`, `seance.cour.type`, etc. — `templates/accueil/detailsSeance.html.twig`, `templates/accueil/listeSeances.html.twig`.
+
+**If you recreated it from zero (all via Maker on `Seance`):**
 
 ```bash
 php bin/console make:entity Seance
 ```
 
-**Choices (typical):**
-
-- Edit entity: **Seance**
-- Add relation: **yes**
-- Relation type: **ManyToOne**
-- Target class: **Cour**
-- Nullable: **no** if every session must have a course; **yes** if optional
-- **Inverse side on Cour:** **yes** → `OneToMany` mappedBy on `Cour`, `mappedBy` / `inversedBy` correctly set
-
-**Then:**
-
-1. `php bin/console make:migration` → review FK creation.
-2. `php bin/console doctrine:migrations:migrate`
-3. **`SeanceType`:** add `EntityType::class` (or `CourType` subset) for choosing the course.
-4. **Twig:** show `{{ seance.cour.nom }}` (example) on show/index.
-
-**Oral:** “ManyToOne holds the **foreign key**; OneToMany is the **inverse** side for navigation from Cour to its sessions.”
-
----
-
-## 7. Example: removing a relation
-
-**Goal:** Remove the link between **Seance** and **Cour**.
-
-1. **Seance:** remove **ManyToOne** property to `Cour` (and annotations/attributes).
-2. **Cour:** remove **OneToMany** collection and `mappedBy` / orphanRemoval if any.
-3. **Form:** remove the course field from `SeanceType`.
-4. **Twig:** remove `seance.cour` display.
-5. **Migration:** `make:migration` — should drop `cour_id` (or equivalent). **Review** before migrate.
-6. **Migrate:** `doctrine:migrations:migrate`
-7. **DB:** confirm FK dropped (phpMyAdmin, `SHOW CREATE TABLE seance`, or Doctrine schema check).
-
-**Warning:** Before removing a relation, check **Inscription**, reports, or constraints — data may **depend** on `Cour` for business logic even if only `Seance` is edited in code.
-
----
-
-## 8. Registration of dogs to a session
-
-**Relations:**
-
-- `Seance` **OneToMany** `Inscription`
-- `Chien` **OneToMany** `Inscription`
-- `Inscription` **ManyToOne** `Seance`
-- `Inscription` **ManyToOne** `Chien`
-
-**Simple explanation:**  
-`Inscription` is an **association entity** between **Chien** and **Seance**. One row = one dog registered to one session. Later you can add **extra columns** on `Inscription` (date registered, status, payment, etc.) without duplicating dog or session tables.
-
-**Oral:** “I use an **intermediate entity** so many dogs can join many sessions, with **metadata** on the link.”
-
----
-
-## 9. Cardinalities for oral exam
-
-| Relation | Doctrine | Cardinality | Explanation |
-|----------|----------|-------------|-------------|
-| Cour — Type | Cour ManyToOne Type; Type OneToMany Cour | **N,1** — **1,N** | Many courses share one type; one type groups many courses. |
-| Cour — Niveau | Cour ManyToOne Niveau; Niveau OneToMany Cour | **N,1** — **1,N** | Many courses per level; one level lists many courses. |
-| Cour — Seance | Cour OneToMany Seance; Seance ManyToOne Cour | **1,N** — **N,1** | One course has many sessions; each session belongs to one course. |
-| Seance — Inscription | Seance OneToMany Inscription; Inscription ManyToOne Seance | **1,N** — **N,1** | One session has many registrations; each registration targets one session. |
-| Chien — Inscription | Chien OneToMany Inscription; Inscription ManyToOne Chien | **1,N** — **N,1** | One dog can have many registrations (over time); each registration is for one dog. |
-| Proprietaire — Chien | Proprietaire OneToMany Chien; Chien ManyToOne Proprietaire | **1,N** — **N,1** | One owner, many dogs; each dog has one owner. |
-| User — Proprietaire | User OneToOne Proprietaire; Proprietaire OneToOne User | **1,1** — **1,1** | One login account linked to one owner profile (and reverse). |
-
----
-
-## 10. Security checklist
-
-- **`ROLE_ADMIN`:** protect admin CRUD (courses, sessions, users) with `access_control` or `#[IsGranted('ROLE_ADMIN')]`.
-- **`ROLE_USER`:** member area (dogs, registrations) — not the same as public pages.
-- **Password hashing:** Symfony `UserPasswordHasher` — never store plain text passwords.
-- **Access control:** `security.yaml` `access_control` rules + voter / attributes on controllers.
-- **CSRF:** delete (and sensitive) forms use a **token**; validate in controller before `remove()`.
-- **Form validation:** Symfony constraints + `#[Valid]` on nested forms if needed.
-- **Twig escaping:** `{{ variable }}` auto-escapes HTML — safe output by default.
-
-**Oral:** “I separate **roles**, **hash passwords**, **restrict URLs**, and **CSRF** on destructive actions.”
-
----
-
-## 11. Useful Symfony commands
+- Add field? → **relation**
+- Relation type → **ManyToOne**
+- Class to relate → **`Cour`**
+- Nullable? → **no** (same as `JoinColumn(nullable: false)` in this project)
+- Add inverse on `Cour`? → **yes** (`mappedBy` / `inversedBy` generated)
+- Then:
 
 ```bash
+php bin/console make:migration
+php bin/console doctrine:migrations:migrate
+```
+
+Then wire **`EntityType`** in `SeanceType` and Twig as in the snippets above (Maker does not build your admin Twig).
+
+---
+
+## Example: remove `Seance` ↔ `Cour` relation (destructive)
+
+Only if you really drop the FK — you must strip **all** usages.
+
+1. `src/Entity/Seance.php` — remove `$cour`, `getCour` / `setCour`, `#[ORM\ManyToOne]` / `JoinColumn`.
+2. `src/Entity/Cour.php` — remove `$seances` collection + `addSeance` / `removeSeance` / `getSeances` and the `OneToMany` attribute.
+3. `src/Form/SeanceType.php` — remove `->add('cour', EntityType::class, ...)`.
+4. **Twig:** `templates/admin_seance/_form.html.twig` (`form.cour`), `templates/admin_seance/listeSeances.html.twig` (cours column), `templates/accueil/detailsSeance.html.twig`, `templates/accueil/listeSeances.html.twig` — anything `seance.cour`.
+5. **Fixtures / controllers** that call `setCour` on `Seance`.
+6. `php bin/console make:migration` + `doctrine:migrations:migrate` — FK `cour_id` dropped on `seance`.
+7. MySQL: `SHOW CREATE TABLE seance;`
+
+---
+
+## `Inscription` (dog ↔ session)
+
+- `Inscription` → `ManyToOne` `Seance`, `ManyToOne` `Chien`
+- `Seance` / `Chien` → `OneToMany` `Inscription`
+
+---
+
+## Relations reference
+
+| Link | Doctrine |
+|------|----------|
+| Cour — Type | Cour ManyToOne Type · Type OneToMany Cour |
+| Cour — Niveau | Cour ManyToOne Niveau · Niveau OneToMany Cour |
+| Cour — Seance | Cour OneToMany Seance · Seance ManyToOne Cour |
+| Seance — Inscription | Seance OneToMany Inscription · Inscription ManyToOne Seance |
+| Chien — Inscription | Chien OneToMany Inscription · Inscription ManyToOne Chien |
+| Proprietaire — Chien | Proprietaire OneToMany Chien · Chien ManyToOne Proprietaire |
+| User — Proprietaire | User OneToOne Proprietaire · Proprietaire OneToOne User |
+
+---
+
+## Security (short)
+
+- Admin: `denyAccessUnlessGranted('ROLE_ADMIN')` on `AdminSeanceController` methods.
+- Delete: POST + `csrf_token('delete' ~ seance.id)` — checked in `delete()` with `$request->getPayload()->getString('_token')`.
+- Twig: `{{ ... }}` escaped by default.
+
+---
+
+## Commands
+
+```bash
+cd /Users/vasin/Desktop/canisPro
+
 composer install
 symfony server:start
 
-php bin/console make:entity
+# Entity fields / relations (interactive — prefer this over copying PHP)
+php bin/console make:entity Seance
+
 php bin/console make:controller
 php bin/console make:form
-php bin/console make:crud
+# make:crud — only on greenfield; can overwrite existing admin code
 
 php bin/console make:migration
 php bin/console doctrine:migrations:migrate
@@ -261,32 +222,12 @@ php bin/console cache:clear
 
 ---
 
-## 12. E5 oral questions and short answers
+## Doctrine
 
-| Question | Short answer |
-|----------|----------------|
-| **Why Symfony?** | Mature framework, components (routing, forms, security), documentation, fits professional PHP apps. |
-| **Why MVC?** | Separates **Model** (data), **View** (Twig), **Controller** (HTTP) — easier maintenance and teamwork. |
-| **Why Doctrine?** | Maps objects to **MySQL**; migrations; less raw SQL; relations in PHP. |
-| **What is an Entity?** | PHP class representing a **table** (and relations) managed by Doctrine. |
-| **What is a Repository?** | Class with **query methods** (`find`, `findAll`, custom DQL) for an entity. |
-| **What is a Controller?** | Handles a **route**; gets data, processes forms, returns a **Response** or **render()** Twig. |
-| **What is Twig?** | Symfony’s **template engine** — HTML with `{{ }}`, `{% %}`, inheritance (`extends`). |
-| **Why use roles?** | **ROLE_ADMIN** vs **ROLE_USER** (and anonymous) to **restrict** features and URLs. |
-| **Purpose of Inscription?** | **Link** a dog to a session; can store registration-specific data. |
-| **What CRUD did you implement?** | **Seance** (session) management: list, add, edit, delete in admin. |
-| **How do you add a new field?** | Entity + migration + form + Twig + validation if needed. |
-| **How do you create a relation?** | `make:entity` (ManyToOne / OneToMany), migration, form field, display in Twig. |
-| **How do you secure delete?** | **POST** only + **CSRF** token validation before `remove()` + `flush()`. |
-
----
-
-## 13. Personal work summary (oral)
-
-You can say:
-
-> “I personally worked on **session management CRUD**, the **admin templates for sessions**, **dog registration to sessions**, **navigation improvements**, the **home page**, **course detail and general information** pages, **`AccueilController`**, **Symfony project setup**, **Git setup and commits**, **mockups**, and **navigation and UI tests**.”
-
----
-
-*Good luck for E5.*
+```php
+$em->persist($entity);
+$em->flush();
+$em->remove($entity);
+$repo->find($id);
+$repo->findAll();
+```
